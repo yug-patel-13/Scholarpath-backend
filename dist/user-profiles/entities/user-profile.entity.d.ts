@@ -1,0 +1,35 @@
+import { User } from '../../users/entities/user.entity';
+export declare class UserProfile {
+    id: number;
+    userId: number;
+    user: User;
+    category: string;
+    name: string;
+    age: number;
+    gender: string;
+    caste: string;
+    aadhaar: string;
+    phone: string;
+    annualIncome: number;
+    marks10: number;
+    marks12: number;
+    landSize: number;
+    crop: string;
+    farmerType: string;
+    loanStatus: string;
+    state: string;
+    district: string;
+    city: string;
+    pincode: string;
+    documents: {
+        aadhaar?: boolean;
+        bank?: boolean;
+        land?: boolean;
+        income?: boolean;
+        marksheet10?: boolean;
+        marksheet12?: boolean;
+        [key: string]: any;
+    };
+    createdAt: Date;
+    updatedAt: Date;
+}
