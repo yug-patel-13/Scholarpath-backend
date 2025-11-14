@@ -18,5 +18,12 @@ export declare class CreateUserProfileDto {
     district?: string;
     city?: string;
     pincode?: string;
+    lowLiteracyTaluka?: boolean;
+    childrenOfMartyrs?: boolean;
+    shramikCard?: boolean;
+    disabilityCertificate?: boolean;
+    widowCertificate?: boolean;
+    orphanCertificate?: boolean;
+    tyaktaCertificate?: boolean;
     documents?: Record<string, any>;
 }

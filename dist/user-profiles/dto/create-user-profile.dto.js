@@ -106,6 +106,34 @@ __decorate([
 ], CreateUserProfileDto.prototype, "pincode", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateUserProfileDto.prototype, "lowLiteracyTaluka", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateUserProfileDto.prototype, "childrenOfMartyrs", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateUserProfileDto.prototype, "shramikCard", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateUserProfileDto.prototype, "disabilityCertificate", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateUserProfileDto.prototype, "widowCertificate", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateUserProfileDto.prototype, "orphanCertificate", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], CreateUserProfileDto.prototype, "tyaktaCertificate", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], CreateUserProfileDto.prototype, "documents", void 0);
 //# sourceMappingURL=create-user-profile.dto.js.map

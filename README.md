@@ -23,8 +23,10 @@ npm install
 2. Configure environment variables:
 ```bash
 cp .env.example .env
-# Edit .env with your database credentials
+# Edit .env with your database credentials and admin credentials
 ```
+
+**Important:** Make sure to set `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `ADMIN_NAME` in your `.env` file before running the seed script!
 
 3. Run migrations:
 ```bash
@@ -79,10 +81,14 @@ npm run start:dev
 - `GET /admin/requests` - All requests (admin only)
 - `PATCH /admin/requests/:id/status` - Update request status (admin only)
 
-## Default Admin Credentials
+## Admin Credentials
 
-- Email: `admin@scholarpath.com`
-- Password: `admin123`
+Admin credentials are configured in the `.env` file:
+- `ADMIN_EMAIL` - Admin email address
+- `ADMIN_PASSWORD` - Admin password
+- `ADMIN_NAME` - Admin display name
 
-**Change these in production!**
+**⚠️ IMPORTANT:** Always change the default admin credentials in production! The seed script will create the admin user using these values from your `.env` file.
+
+
 

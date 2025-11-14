@@ -3,12 +3,13 @@ export declare class CreateFormFillRequestDto {
     userId: number;
     requestType: RequestType;
     scholarshipId?: number;
-    description?: string;
+    formName?: string;
+    description: string;
     contactPhone?: string;
     contactEmail?: string;
     address?: string;
     pincode?: string;
-    preferredDate?: Date;
+    preferredDate?: string;
     preferredTime?: string;
     additionalInfo?: Record<string, any>;
 }

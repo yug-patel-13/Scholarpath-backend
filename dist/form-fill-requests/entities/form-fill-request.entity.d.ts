@@ -16,6 +16,7 @@ export declare class FormFillRequest {
     requestType: RequestType;
     status: RequestStatus;
     scholarshipId: number;
+    formName: string;
     description: string;
     contactPhone: string;
     contactEmail: string;

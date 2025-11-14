@@ -77,3 +77,5 @@ The backend should now connect successfully!
 - Create the database first (see Step 3)
 - Make sure database name matches in `.env` (`DB_NAME=scholarpath`)
 
+
+

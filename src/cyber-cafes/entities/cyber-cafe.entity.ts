@@ -60,3 +60,5 @@ export class CyberCafe {
   updatedAt: Date;
 }
 
+
+

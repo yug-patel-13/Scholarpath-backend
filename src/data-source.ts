@@ -21,5 +21,10 @@ export const AppDataSource = new DataSource({
   migrations: ['src/migrations/*.ts'],
   synchronize: false,
   logging: true,
+  extra: {
+    max: 1, // Use only 1 connection for seed script to avoid connection issues
+    idleTimeoutMillis: 10000, // Close idle connections after 10 seconds
+    connectionTimeoutMillis: 5000, // Return an error after 5 seconds if connection could not be established
+  },
 });
 

@@ -1,7 +1,12 @@
 /.env
-
 /node_modules
 /.pnp
 .pnp.js
 /coverage
 /build
+/dist
+*.js
+!jest.config.js
+*.js.map
+*.d.ts
+tsconfig.tsbuildinfo

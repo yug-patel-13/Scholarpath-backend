@@ -49,6 +49,9 @@ export class FormFillRequest {
   @Column({ nullable: true })
   scholarshipId: number;
 
+  @Column({ nullable: true })
+  formName: string;
+
   @Column('text', { nullable: true })
   description: string;
 

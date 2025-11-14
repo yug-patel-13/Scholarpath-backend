@@ -101,6 +101,34 @@ __decorate([
     __metadata("design:type", String)
 ], UserProfile.prototype, "pincode", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false, nullable: true }),
+    __metadata("design:type", Boolean)
+], UserProfile.prototype, "lowLiteracyTaluka", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false, nullable: true }),
+    __metadata("design:type", Boolean)
+], UserProfile.prototype, "childrenOfMartyrs", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false, nullable: true }),
+    __metadata("design:type", Boolean)
+], UserProfile.prototype, "shramikCard", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false, nullable: true }),
+    __metadata("design:type", Boolean)
+], UserProfile.prototype, "disabilityCertificate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false, nullable: true }),
+    __metadata("design:type", Boolean)
+], UserProfile.prototype, "widowCertificate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false, nullable: true }),
+    __metadata("design:type", Boolean)
+], UserProfile.prototype, "orphanCertificate", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'boolean', default: false, nullable: true }),
+    __metadata("design:type", Boolean)
+], UserProfile.prototype, "tyaktaCertificate", void 0);
+__decorate([
     (0, typeorm_1.Column)('jsonb', { nullable: true }),
     __metadata("design:type", Object)
 ], UserProfile.prototype, "documents", void 0);

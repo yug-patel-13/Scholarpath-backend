@@ -29,6 +29,14 @@ import { AdminModule } from './admin/admin.module';
       retryAttempts: 3,
       retryDelay: 3000,
       autoLoadEntities: true,
+      extra: {
+        max: 5, // Maximum number of connections in the pool (reduced to prevent "too many clients")
+        min: 1, // Minimum number of connections in the pool
+        idleTimeoutMillis: 20000, // Close idle connections after 20 seconds (reduced)
+        connectionTimeoutMillis: 3000, // Return an error after 3 seconds if connection could not be established
+        acquireTimeoutMillis: 30000, // Maximum time to wait for a connection from the pool
+        evictionRunIntervalMillis: 10000, // Run eviction every 10 seconds
+      },
     }),
     AuthModule,
     UsersModule,

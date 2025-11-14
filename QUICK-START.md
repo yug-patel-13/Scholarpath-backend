@@ -84,3 +84,5 @@ npx ts-node src/seed/seed.ts
 - Check `.env` file has correct credentials
 - Make sure database name matches: `scholarpath`
 
+
+

@@ -54,6 +54,9 @@ export class Scholarship {
     farmerType?: string[]; // ['marginal', 'small', 'large']
     loanStatus?: string; // 'yes', 'no', 'any'
     crop?: string[];
+    // CMSS (Chief Minister Scholarship Scheme) Special Categories
+    requiresCMSSCategory?: boolean; // If true, requires at least one CMSS category
+    cmssCategories?: string[]; // List of required CMSS categories: ['lowLiteracyTaluka', 'childrenOfMartyrs', 'shramikCard', 'disabilityCertificate', 'widowCertificate', 'orphanCertificate', 'tyaktaCertificate']
   };
 
   // Steps to fill form

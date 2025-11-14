@@ -8,67 +8,100 @@ import * as bcrypt from 'bcryptjs';
 import { User } from '../users/entities/user.entity';
 
 async function seed() {
-  await AppDataSource.initialize();
+  let retries = 3;
+  let lastError: any = null;
 
-  const categoryRepo = AppDataSource.getRepository(Category);
-  const scholarshipRepo = AppDataSource.getRepository(Scholarship);
-  const cyberCafeRepo = AppDataSource.getRepository(CyberCafe);
-  const userRepo = AppDataSource.getRepository(User);
+  while (retries > 0) {
+    try {
+      if (AppDataSource.isInitialized) {
+        await AppDataSource.destroy();
+      }
+      
+      // Wait a bit before retrying if not first attempt
+      if (retries < 3) {
+        console.log(`Waiting 5 seconds before retry (${4 - retries} attempt)...`);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
+      
+      await AppDataSource.initialize();
+      break; // Success, exit retry loop
+    } catch (error: any) {
+      lastError = error;
+      if (error.code === '53300' && retries > 1) {
+        // "too many clients" error - retry
+        console.log(`Connection error (too many clients). Retrying... (${4 - retries} attempt)`);
+        retries--;
+        continue;
+      }
+      throw error; // Other errors or last retry failed
+    }
+  }
 
-  // Seed Categories
-  console.log('Seeding categories...');
-  const categories = [
+  if (!AppDataSource.isInitialized) {
+    throw lastError || new Error('Failed to initialize database connection after retries');
+  }
+
+  try {
+
+    const categoryRepo = AppDataSource.getRepository(Category);
+    const scholarshipRepo = AppDataSource.getRepository(Scholarship);
+    const cyberCafeRepo = AppDataSource.getRepository(CyberCafe);
+    const userRepo = AppDataSource.getRepository(User);
+
+    // Seed Categories
+    console.log('Seeding categories...');
+    const categories = [
     {
       name: 'Farmer',
       description: 'Benefits and scholarships for farmers',
-      imageUrl: '/farmer.jpg',
+      imageUrl: 'https://images.unsplash.com/photo-1560493676-04071c5f467b?w=800&h=600&fit=crop',
       isActive: true,
     },
     {
       name: 'SC/ST/OBC',
       description: 'Scholarships for Scheduled Castes, Scheduled Tribes, and Other Backward Classes',
-      imageUrl: '/sc.jpg',
+      imageUrl: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&h=600&fit=crop',
       isActive: true,
     },
     {
       name: 'Merit Based',
       description: 'Merit-based scholarships for high-performing students',
-      imageUrl: '/merit.webp',
+      imageUrl: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop',
       isActive: true,
     },
     {
       name: 'Women',
       description: 'Scholarships specifically for women students',
-      imageUrl: '/woman.jpg',
+      imageUrl: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&h=600&fit=crop',
       isActive: true,
     },
     {
       name: 'EWS',
       description: 'Economically Weaker Section scholarships',
-      imageUrl: '/ews.jpg',
+      imageUrl: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&h=600&fit=crop',
       isActive: true,
     },
   ];
 
-  const savedCategories = await Promise.all(
-    categories.map(async (cat) => {
-      let existing = await categoryRepo.findOne({ where: { name: cat.name } });
-      if (!existing) {
-        existing = await categoryRepo.save(categoryRepo.create(cat));
-      }
-      return existing;
-    }),
-  );
+    const savedCategories = await Promise.all(
+      categories.map(async (cat) => {
+        let existing = await categoryRepo.findOne({ where: { name: cat.name } });
+        if (!existing) {
+          existing = await categoryRepo.save(categoryRepo.create(cat));
+        }
+        return existing;
+      }),
+    );
 
-  // Seed Scholarships with comprehensive Indian scholarships
-  console.log('Seeding scholarships...');
-  const farmerCategory = savedCategories.find((c) => c.name === 'Farmer');
-  const scstCategory = savedCategories.find((c) => c.name === 'SC/ST/OBC');
-  const meritCategory = savedCategories.find((c) => c.name === 'Merit Based');
-  const womanCategory = savedCategories.find((c) => c.name === 'Women');
-  const ewsCategory = savedCategories.find((c) => c.name === 'EWS');
+    // Seed Scholarships with comprehensive Indian scholarships
+    console.log('Seeding scholarships...');
+    const farmerCategory = savedCategories.find((c) => c.name === 'Farmer');
+    const scstCategory = savedCategories.find((c) => c.name === 'SC/ST/OBC');
+    const meritCategory = savedCategories.find((c) => c.name === 'Merit Based');
+    const womanCategory = savedCategories.find((c) => c.name === 'Women');
+    const ewsCategory = savedCategories.find((c) => c.name === 'EWS');
 
-  const scholarships = [
+    const scholarships = [
     // ========== FARMER SCHOLARSHIPS ==========
     {
       title: 'PM Kisan Samman Nidhi (PM-KISAN)',
@@ -537,6 +570,16 @@ async function seed() {
         minAge: 17,
         maxAge: 30,
         caste: ['sc', 'st', 'obc', 'general'], // Also available for General if they meet special category criteria
+        requiresCMSSCategory: true, // CMSS requires special category for General, optional for SC/ST/OBC
+        cmssCategories: [
+          'lowLiteracyTaluka',
+          'childrenOfMartyrs',
+          'shramikCard',
+          'disabilityCertificate',
+          'widowCertificate',
+          'orphanCertificate',
+          'tyaktaCertificate',
+        ],
       },
       steps: [
         {
@@ -984,6 +1027,16 @@ async function seed() {
         minMarks12: 60, // Minimum 60% in 12th standard
         minAge: 17,
         maxAge: 30,
+        requiresCMSSCategory: true, // CMSS requires at least one of the 7 special categories
+        cmssCategories: [
+          'lowLiteracyTaluka',
+          'childrenOfMartyrs',
+          'shramikCard',
+          'disabilityCertificate',
+          'widowCertificate',
+          'orphanCertificate',
+          'tyaktaCertificate',
+        ],
       },
       steps: [
         {
@@ -1426,17 +1479,22 @@ async function seed() {
     },
   ];
 
-  // Clear existing scholarships and seed new ones
-  console.log('Clearing existing scholarships...');
-  await scholarshipRepo.clear();
+    // Clear existing scholarships and seed new ones
+    console.log('Clearing existing scholarships...');
+    await scholarshipRepo.clear();
 
-  for (const sch of scholarships) {
-    await scholarshipRepo.save(scholarshipRepo.create(sch));
-  }
+    // Use bulk insert instead of individual saves to reduce connections
+    console.log('Inserting scholarships in batches...');
+    const batchSize = 50;
+    for (let i = 0; i < scholarships.length; i += batchSize) {
+      const batch = scholarships.slice(i, i + batchSize);
+      await scholarshipRepo.save(scholarshipRepo.create(batch));
+      console.log(`Inserted batch ${Math.floor(i / batchSize) + 1} of ${Math.ceil(scholarships.length / batchSize)}`);
+    }
 
-  // Seed Cyber Cafes (sample data)
-  console.log('Seeding cyber cafes...');
-  const cafes = [
+    // Seed Cyber Cafes (sample data)
+    console.log('Seeding cyber cafes...');
+    const cafes = [
     {
       name: 'Cyber Cafe Central',
       address: 'Main Street, Ahmedabad',
@@ -1470,29 +1528,53 @@ async function seed() {
     if (!existing) {
       await cyberCafeRepo.save(cyberCafeRepo.create(cafe));
     }
-  }
+    }
 
-  // Seed Admin User
-  console.log('Seeding admin user...');
-  const adminUser = await userRepo.findOne({ where: { email: 'admin@scholarpath.com' } });
-  if (!adminUser) {
-    const hashedPassword = await bcrypt.hash('admin123', 10);
-    await userRepo.save(
-      userRepo.create({
-        email: 'admin@scholarpath.com',
-        name: 'Admin User',
-        password: hashedPassword,
-        isAdmin: true,
-      }),
-    );
-    console.log('Admin user created: admin@scholarpath.com / admin123');
-  }
+    // Seed Admin User
+    console.log('Seeding admin user...');
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@scholarpath.com';
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const adminName = process.env.ADMIN_NAME || 'Admin User';
+    
+    // Warn if using default credentials
+    if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+      console.warn('⚠️  WARNING: Using default admin credentials. Set ADMIN_EMAIL and ADMIN_PASSWORD in .env file for production!');
+    }
+    
+    const adminUser = await userRepo.findOne({ where: { email: adminEmail } });
+    if (!adminUser) {
+      const hashedPassword = await bcrypt.hash(adminPassword, 10);
+      await userRepo.save(
+        userRepo.create({
+          email: adminEmail,
+          name: adminName,
+          password: hashedPassword,
+          isAdmin: true,
+        }),
+      );
+      console.log(`Admin user created: ${adminEmail} / ${adminPassword}`);
+    } else {
+      console.log(`Admin user already exists: ${adminEmail}`);
+    }
 
-  console.log('Seeding completed!');
-  await AppDataSource.destroy();
+    console.log('Seeding completed!');
+  } catch (error) {
+    console.error('Error seeding database:', error);
+    throw error;
+  } finally {
+    if (AppDataSource.isInitialized) {
+      await AppDataSource.destroy();
+      console.log('Database connection closed.');
+    }
+  }
 }
 
-seed().catch((error) => {
-  console.error('Error seeding database:', error);
-  process.exit(1);
-});
+seed()
+  .then(() => {
+    console.log('Seed script finished successfully.');
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error('Error seeding database:', error);
+    process.exit(1);
+  });

@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsEnum, IsOptional, IsDateString } from 'class-validator';
+import { IsNumber, IsString, IsEnum, IsOptional } from 'class-validator';
 import { RequestType } from '../entities/form-fill-request.entity';
 
 export class CreateFormFillRequestDto {
@@ -14,7 +14,10 @@ export class CreateFormFillRequestDto {
 
   @IsOptional()
   @IsString()
-  description?: string;
+  formName?: string;
+
+  @IsString()
+  description: string;
 
   @IsOptional()
   @IsString()
@@ -33,8 +36,8 @@ export class CreateFormFillRequestDto {
   pincode?: string;
 
   @IsOptional()
-  @IsDateString()
-  preferredDate?: Date;
+  @IsString()
+  preferredDate?: string;
 
   @IsOptional()
   @IsString()
@@ -43,4 +46,6 @@ export class CreateFormFillRequestDto {
   @IsOptional()
   additionalInfo?: Record<string, any>;
 }
+
+
 

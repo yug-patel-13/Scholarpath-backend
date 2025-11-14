@@ -22,6 +22,8 @@ export declare class Scholarship {
         farmerType?: string[];
         loanStatus?: string;
         crop?: string[];
+        requiresCMSSCategory?: boolean;
+        cmssCategories?: string[];
     };
     steps: Array<{
         title: string;

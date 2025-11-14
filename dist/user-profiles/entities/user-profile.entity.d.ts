@@ -21,6 +21,13 @@ export declare class UserProfile {
     district: string;
     city: string;
     pincode: string;
+    lowLiteracyTaluka: boolean;
+    childrenOfMartyrs: boolean;
+    shramikCard: boolean;
+    disabilityCertificate: boolean;
+    widowCertificate: boolean;
+    orphanCertificate: boolean;
+    tyaktaCertificate: boolean;
     documents: {
         aadhaar?: boolean;
         bank?: boolean;

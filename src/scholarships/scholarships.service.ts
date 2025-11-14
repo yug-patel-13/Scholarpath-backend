@@ -208,6 +208,52 @@ export class ScholarshipsService {
       }
     }
 
+    // Check CMSS (Chief Minister Scholarship Scheme) Special Categories
+    // CMSS requires at least one of the 7 special categories to be true
+    if (rules.cmssCategories && Array.isArray(rules.cmssCategories) && rules.cmssCategories.length > 0) {
+      const hasCMSSCategory = 
+        (profile.lowLiteracyTaluka === true && rules.cmssCategories.includes('lowLiteracyTaluka')) ||
+        (profile.childrenOfMartyrs === true && rules.cmssCategories.includes('childrenOfMartyrs')) ||
+        (profile.shramikCard === true && rules.cmssCategories.includes('shramikCard')) ||
+        (profile.disabilityCertificate === true && rules.cmssCategories.includes('disabilityCertificate')) ||
+        (profile.widowCertificate === true && rules.cmssCategories.includes('widowCertificate')) ||
+        (profile.orphanCertificate === true && rules.cmssCategories.includes('orphanCertificate')) ||
+        (profile.tyaktaCertificate === true && rules.cmssCategories.includes('tyaktaCertificate'));
+
+      // If CMSS categories are required, user must have at least one
+      if (rules.requiresCMSSCategory === true && !hasCMSSCategory) {
+        return false;
+      }
+
+      // If specific CMSS categories are listed, user must match at least one
+      if (rules.cmssCategories.length > 0 && !hasCMSSCategory) {
+        return false;
+      }
+    }
+
+    // For CMSS scholarship specifically, check if user has any CMSS category
+    // This is a special case: CMSS is available if user has ANY of the 7 categories
+    // OR if they are SC/ST/OBC (which is already checked by caste)
+    if (rules.requiresCMSSCategory === true) {
+      const hasAnyCMSSCategory = 
+        profile.lowLiteracyTaluka === true ||
+        profile.childrenOfMartyrs === true ||
+        profile.shramikCard === true ||
+        profile.disabilityCertificate === true ||
+        profile.widowCertificate === true ||
+        profile.orphanCertificate === true ||
+        profile.tyaktaCertificate === true;
+
+      // For General category, CMSS requires at least one special category
+      // For SC/ST/OBC, they can apply without special category (caste check already passed)
+      if (profile.caste && ['general', 'ebc'].includes(profile.caste.toLowerCase())) {
+        if (!hasAnyCMSSCategory) {
+          return false;
+        }
+      }
+      // For SC/ST/OBC, they can apply even without special category
+    }
+
     return true;
   }
 }

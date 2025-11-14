@@ -21,5 +21,10 @@ exports.AppDataSource = new typeorm_1.DataSource({
     migrations: ['src/migrations/*.ts'],
     synchronize: false,
     logging: true,
+    extra: {
+        max: 1,
+        idleTimeoutMillis: 10000,
+        connectionTimeoutMillis: 5000,
+    },
 });
 //# sourceMappingURL=data-source.js.map

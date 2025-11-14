@@ -36,3 +36,5 @@ If you haven't created the `scholarpath` database yet:
 
 Then run the migration!
 
+
+

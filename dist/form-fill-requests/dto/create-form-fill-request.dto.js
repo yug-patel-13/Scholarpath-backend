@@ -32,6 +32,10 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
+], CreateFormFillRequestDto.prototype, "formName", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
 ], CreateFormFillRequestDto.prototype, "description", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
@@ -55,8 +59,8 @@ __decorate([
 ], CreateFormFillRequestDto.prototype, "pincode", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsDateString)(),
-    __metadata("design:type", Date)
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
 ], CreateFormFillRequestDto.prototype, "preferredDate", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),

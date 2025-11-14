@@ -72,7 +72,31 @@ export class CreateUserProfileDto {
   @IsString()
   pincode?: string;
 
+  // CMSS (Chief Minister Scholarship Scheme) Special Categories
+  @IsOptional()
+  lowLiteracyTaluka?: boolean;
+
+  @IsOptional()
+  childrenOfMartyrs?: boolean;
+
+  @IsOptional()
+  shramikCard?: boolean;
+
+  @IsOptional()
+  disabilityCertificate?: boolean;
+
+  @IsOptional()
+  widowCertificate?: boolean;
+
+  @IsOptional()
+  orphanCertificate?: boolean;
+
+  @IsOptional()
+  tyaktaCertificate?: boolean;
+
   @IsOptional()
   documents?: Record<string, any>;
 }
+
+
 

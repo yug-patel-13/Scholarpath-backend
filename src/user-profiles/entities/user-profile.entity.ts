@@ -80,6 +80,28 @@ export class UserProfile {
   @Column({ nullable: true })
   pincode: string;
 
+  // CMSS (Chief Minister Scholarship Scheme) Special Categories
+  @Column({ type: 'boolean', default: false, nullable: true })
+  lowLiteracyTaluka: boolean; // List of Taluka Having below 50 Literacy Rate
+
+  @Column({ type: 'boolean', default: false, nullable: true })
+  childrenOfMartyrs: boolean; // Children of martyrs (Shaheed Jawan)
+
+  @Column({ type: 'boolean', default: false, nullable: true })
+  shramikCard: boolean; // Formates of Shramik Card (Workers)
+
+  @Column({ type: 'boolean', default: false, nullable: true })
+  disabilityCertificate: boolean; // Disability Certificate
+
+  @Column({ type: 'boolean', default: false, nullable: true })
+  widowCertificate: boolean; // Widow Certificate
+
+  @Column({ type: 'boolean', default: false, nullable: true })
+  orphanCertificate: boolean; // Orphan Certificate
+
+  @Column({ type: 'boolean', default: false, nullable: true })
+  tyaktaCertificate: boolean; // Tyakta Certificate (abandoned/renounced)
+
   // Documents metadata
   @Column('jsonb', { nullable: true })
   documents: {

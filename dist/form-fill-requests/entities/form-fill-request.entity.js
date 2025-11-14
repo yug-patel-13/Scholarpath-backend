@@ -60,6 +60,10 @@ __decorate([
     __metadata("design:type", Number)
 ], FormFillRequest.prototype, "scholarshipId", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], FormFillRequest.prototype, "formName", void 0);
+__decorate([
     (0, typeorm_1.Column)('text', { nullable: true }),
     __metadata("design:type", String)
 ], FormFillRequest.prototype, "description", void 0);
