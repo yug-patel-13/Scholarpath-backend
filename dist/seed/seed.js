@@ -111,6 +111,12 @@ async function seed() {
             if (!existing) {
                 existing = await categoryRepo.save(categoryRepo.create(cat));
             }
+            else {
+                existing.description = cat.description;
+                existing.imageUrl = cat.imageUrl;
+                existing.isActive = cat.isActive;
+                existing = await categoryRepo.save(existing);
+            }
             return existing;
         }));
         console.log('Seeding scholarships...');
@@ -571,20 +577,121 @@ async function seed() {
                 isActive: true,
             },
             {
-                title: 'Chief Minister Scholarship Scheme (CMSS) - Gujarat (SC/ST/OBC/General)',
-                description: 'Gujarat Chief Minister Scholarship Scheme (CMSS) provides financial assistance to SC/ST/OBC students and General category students who belong to any of the 7 special categories. The scheme has 7 special categories: 1) Students from Taluka with below 50% literacy rate, 2) Children of Martyrs (Shaheed Jawan), 3) Students with Shramik Card (Workers), 4) Students with Disability Certificate, 5) Children of Widows, 6) Orphan Students, 7) Children with Tyakta Certificate (abandoned/renounced). Available for SC/ST/OBC students OR General category students meeting any of the 7 special category criteria. Minimum 60% marks in 10th and 12th required. Family income should not exceed Rs. 4.5-6 lakh depending on category. Provides 50% tuition fee assistance up to Rs. 25,000-50,000 per year, plus hostel/food allowance and book assistance.',
+                title: 'Chief Minister Scholarship Scheme (CMSS) - Gujarat (SC/ST/OBC)',
+                description: 'Gujarat Chief Minister Scholarship Scheme (CMSS) provides financial assistance to SC/ST/OBC students pursuing higher education. Covers diploma, undergraduate, and postgraduate courses in government, private, and self-financed institutions in Gujarat. SC/ST/OBC students are automatically eligible if they meet basic criteria (minimum 60% marks in 10th and 12th, family income ≤ Rs. 4.5 lakh). The scheme also has 7 special categories for General category students: 1) Students from Taluka with below 50% literacy rate, 2) Children of Martyrs (Shaheed Jawan), 3) Students with Shramik Card (Workers), 4) Students with Disability Certificate, 5) Children of Widows, 6) Orphan Students, 7) Children with Tyakta Certificate (abandoned/renounced). Provides 50% tuition fee assistance up to Rs. 25,000-50,000 per year, plus hostel/food allowance (Rs. 1,200/month) and book assistance.',
                 link: 'https://scholarships.gujarat.gov.in/',
                 amount: 50000,
                 states: 'Gujarat',
                 applicableFor: 'sc/st/obc',
                 categoryId: scstCategory?.id,
                 eligibilityRules: {
+                    maxIncome: 450000,
+                    minMarks10: 60,
+                    minMarks12: 60,
+                    minAge: 17,
+                    maxAge: 30,
+                    caste: ['sc', 'st', 'obc'],
+                    requiresCMSSCategory: false,
+                    cmssCategories: [
+                        'lowLiteracyTaluka',
+                        'childrenOfMartyrs',
+                        'shramikCard',
+                        'disabilityCertificate',
+                        'widowCertificate',
+                        'orphanCertificate',
+                        'tyaktaCertificate',
+                    ],
+                },
+                steps: [
+                    {
+                        title: 'Eligibility Check - For SC/ST/OBC Students',
+                        items: [
+                            'SC/ST/OBC students are automatically eligible if they meet basic criteria',
+                            'Must be domicile of Gujarat',
+                            'Minimum 60% marks in 10th and 12th standard',
+                            'Family income ≤ Rs. 4.5 lakh per annum',
+                            'Enrolled in recognized institution in Gujarat',
+                        ],
+                    },
+                    {
+                        title: 'Obtain Required Certificate',
+                        items: [
+                            'Upload valid SC/ST/OBC caste certificate',
+                            'Certificate should be issued by competent authority (Tehsildar/SDM)',
+                            'Certificate should be valid and not expired',
+                        ],
+                    },
+                    {
+                        title: 'Registration on Gujarat Scholarships Portal',
+                        items: [
+                            'Visit official Gujarat Scholarships portal: https://scholarships.gujarat.gov.in/',
+                            'Click on "Chief Minister Scholarship Scheme (CMSS)"',
+                            'Select your category: SC/ST/OBC',
+                            'Click on "New Registration" or "Login"',
+                            'Register with Aadhaar number and verify via OTP',
+                            'Fill personal details, caste, and family income information',
+                        ],
+                    },
+                    {
+                        title: 'Document Upload',
+                        items: [
+                            'Upload caste certificate (SC/ST/OBC)',
+                            'Upload income certificate (family income ≤ Rs. 4.5 lakh)',
+                            'Upload 10th standard mark sheet (showing minimum 60% marks)',
+                            'Upload 12th standard mark sheet (showing minimum 60% marks)',
+                            'Upload current admission proof from recognized institution in Gujarat',
+                            'Upload domicile certificate of Gujarat',
+                            'Upload Aadhaar card',
+                            'Upload bank account details (passbook/cancelled cheque)',
+                            'Upload passport size photograph',
+                            'Upload fee receipt from institution',
+                        ],
+                    },
+                    {
+                        title: 'Application Submission',
+                        items: [
+                            'Fill all educational details (diploma/UG/PG course information)',
+                            'Enter institution details (government/private/self-financed)',
+                            'Enter course fee details',
+                            'Review all information and uploaded documents',
+                            'Submit application online',
+                            'Save Application ID/Reference Number for tracking',
+                            'Take printout of submitted application',
+                        ],
+                    },
+                    {
+                        title: 'Verification & Disbursement',
+                        items: [
+                            'District Education Officer verifies caste certificate',
+                            'District verifies income certificate and domicile status',
+                            'Institution verifies admission and academic marks (minimum 60%)',
+                            'State Education Department cross-checks all documents',
+                            'Eligible applications are approved',
+                            'Scholarship amount (50% tuition fee up to Rs. 25,000-50,000) credited to bank account',
+                            'Hostel and food allowance (Rs. 1,200/month) for students outside native taluka',
+                            'Book and instrument assistance provided in first year',
+                            'Track application status using Application ID at scholarships.gujarat.gov.in',
+                        ],
+                    },
+                ],
+                requiredDocuments: ['aadhaar', 'caste_certificate', 'income_certificate', 'gujarat_domicile', 'marksheet_10th_60percent', 'marksheet_12th_60percent', 'admission_proof', 'institution_fee_receipt', 'bank_account', 'passport_photo'],
+                isActive: true,
+            },
+            {
+                title: 'Chief Minister Scholarship Scheme (CMSS) - Gujarat',
+                description: 'Gujarat Chief Minister Scholarship Scheme (CMSS) provides financial assistance to students from economically weaker sections and special categories pursuing higher education. Covers diploma, undergraduate, and postgraduate courses in government, private, and self-financed institutions in Gujarat. The scheme has 7 special categories: 1) Students from Taluka with below 50% literacy rate, 2) Children of Martyrs (Shaheed Jawan), 3) Students with Shramik Card (Workers), 4) Students with Disability Certificate, 5) Children of Widows, 6) Orphan Students, 7) Children with Tyakta Certificate (abandoned/renounced). Available for all eligible students (SC/ST/OBC/General) if they belong to any of the 7 special categories OR are SC/ST/OBC. Minimum 60% marks in 10th and 12th required. Family income should not exceed Rs. 4.5-6 lakh depending on category. Provides 50% tuition fee assistance up to Rs. 25,000-50,000 per year, plus hostel/food allowance (Rs. 1,200/month) and book assistance.',
+                link: 'https://scholarships.gujarat.gov.in/',
+                amount: 50000,
+                states: 'Gujarat',
+                applicableFor: 'merit',
+                categoryId: meritCategory?.id,
+                eligibilityRules: {
                     maxIncome: 600000,
                     minMarks10: 60,
                     minMarks12: 60,
                     minAge: 17,
                     maxAge: 30,
-                    caste: ['sc', 'st', 'obc', 'general'],
+                    caste: ['sc', 'st', 'obc', 'general', 'ebc'],
                     requiresCMSSCategory: true,
                     cmssCategories: [
                         'lowLiteracyTaluka',
@@ -1024,116 +1131,6 @@ async function seed() {
                     },
                 ],
                 requiredDocuments: ['aadhaar', 'income_certificate', 'marksheet', 'school_admission', 'bank_account'],
-                isActive: true,
-            },
-            {
-                title: 'Chief Minister Scholarship Scheme (CMSS) - Gujarat',
-                description: 'Gujarat Chief Minister Scholarship Scheme (CMSS) provides financial assistance to students from economically weaker sections and special categories pursuing higher education. Covers diploma, undergraduate, and postgraduate courses in government, private, and self-financed institutions in Gujarat. The scheme has 7 special categories: 1) Students from Taluka with below 50% literacy rate, 2) Children of Martyrs (Shaheed Jawan), 3) Students with Shramik Card (Workers), 4) Students with Disability Certificate, 5) Children of Widows, 6) Orphan Students, 7) Children with Tyakta Certificate (abandoned/renounced). Minimum 60% marks in 10th and 12th required. Family income should not exceed Rs. 4.5-6 lakh depending on category. Provides 50% tuition fee assistance up to Rs. 25,000-50,000 per year, plus hostel/food allowance (Rs. 1,200/month) and book assistance. Available for all eligible students regardless of caste/gender if they belong to any of the 7 special categories.',
-                link: 'https://scholarships.gujarat.gov.in/',
-                amount: 50000,
-                states: 'Gujarat',
-                applicableFor: 'ews',
-                categoryId: ewsCategory?.id,
-                eligibilityRules: {
-                    maxIncome: 600000,
-                    minMarks10: 60,
-                    minMarks12: 60,
-                    minAge: 17,
-                    maxAge: 30,
-                    requiresCMSSCategory: true,
-                    cmssCategories: [
-                        'lowLiteracyTaluka',
-                        'childrenOfMartyrs',
-                        'shramikCard',
-                        'disabilityCertificate',
-                        'widowCertificate',
-                        'orphanCertificate',
-                        'tyaktaCertificate',
-                    ],
-                },
-                steps: [
-                    {
-                        title: 'Eligibility Check - 7 CMSS Special Categories',
-                        items: [
-                            '1. Low Literacy Taluka: Students from Taluka with below 50% literacy rate (check official list on scholarships.gujarat.gov.in)',
-                            '2. Children of Martyrs: Children of Shaheed Jawan (martyrs) - need Shaheed Jawan certificate',
-                            '3. Shramik Card Holders: Students with valid Shramik Card (worker/laborer certificate)',
-                            '4. Disability: Students with disability certificate (minimum 40% disability)',
-                            '5. Widow\'s Children: Children of widows - need widow certificate',
-                            '6. Orphan Students: Orphan children - need orphan certificate',
-                            '7. Tyakta Certificate: Children whose parents have abandoned/renounced them - need Tyakta certificate',
-                            'Additional Requirements: Must be domicile of Gujarat, minimum 60% marks in 10th and 12th, enrolled in recognized institution in Gujarat, family income ≤ Rs. 4.5-6 lakh',
-                        ],
-                    },
-                    {
-                        title: 'Obtain Required Certificate (Based on Your Category)',
-                        items: [
-                            'For Low Literacy Taluka: Verify your Taluka from official list on scholarships.gujarat.gov.in (Taluka with <50% literacy rate)',
-                            'For Martyrs\' Children: Obtain Shaheed Jawan certificate from district administration',
-                            'For Workers: Obtain Shramik Card from labor department (check format on scholarships.gujarat.gov.in)',
-                            'For Disability: Obtain disability certificate (minimum 40% disability) from designated medical authority',
-                            'For Widow\'s Children: Obtain widow certificate from Tehsildar/BDO office',
-                            'For Orphan: Obtain orphan certificate from Child Welfare Committee/District Magistrate',
-                            'For Tyakta: Obtain Tyakta certificate (abandoned/renounced children) from district administration',
-                        ],
-                    },
-                    {
-                        title: 'Registration on Gujarat Scholarships Portal',
-                        items: [
-                            'Visit official Gujarat Scholarships portal: https://scholarships.gujarat.gov.in/',
-                            'Click on "Chief Minister Scholarship Scheme (CMSS)"',
-                            'Select your special category from the 7 categories',
-                            'Click on "New Registration" or "Login" if already registered',
-                            'Register with Aadhaar number and verify via OTP',
-                            'Fill personal details, select category, and family income information',
-                        ],
-                    },
-                    {
-                        title: 'Document Upload',
-                        items: [
-                            'Upload category-specific certificate (as per your chosen category: Low Literacy Taluka proof/Shaheed Jawan certificate/Shramik Card/Disability certificate/Widow certificate/Orphan certificate/Tyakta certificate)',
-                            'Upload income certificate (family income ≤ Rs. 4.5 lakh or Rs. 6 lakh as applicable)',
-                            'Upload 10th standard mark sheet (showing minimum 60% marks)',
-                            'Upload 12th standard mark sheet (showing minimum 60% marks)',
-                            'Upload current admission proof from recognized institution in Gujarat',
-                            'Upload domicile certificate of Gujarat',
-                            'Upload Aadhaar card',
-                            'Upload bank account details (passbook/cancelled cheque)',
-                            'Upload passport size photograph',
-                            'Upload fee receipt from institution (if applicable)',
-                            'Upload caste certificate (if applicable for SC/ST/OBC/EBC/SEBC)',
-                        ],
-                    },
-                    {
-                        title: 'Application Submission',
-                        items: [
-                            'Fill all educational details (diploma/UG/PG course information)',
-                            'Enter institution details (government/private/self-financed)',
-                            'Enter course fee details',
-                            'Verify Taluka name if applying under Low Literacy Taluka category (check official list)',
-                            'Review all information and uploaded documents',
-                            'Submit application online',
-                            'Save Application ID/Reference Number for tracking',
-                            'Take printout of submitted application for future reference',
-                        ],
-                    },
-                    {
-                        title: 'Verification & Disbursement',
-                        items: [
-                            'District Education Officer verifies category-specific certificate (martyrs/widow/orphan/disability/etc.)',
-                            'District verifies income certificate and domicile status',
-                            'Institution verifies admission and academic marks (minimum 60%)',
-                            'State Education Department cross-checks all documents',
-                            'For Low Literacy Taluka: Verify Taluka is in official list of Talukas with <50% literacy',
-                            'Eligible applications are approved',
-                            'Scholarship amount (50% tuition fee up to Rs. 25,000-50,000) credited to bank account',
-                            'Hostel and food allowance (Rs. 1,200/month) credited for students outside native taluka',
-                            'Book and instrument assistance provided in first year',
-                            'Track application status using Application ID at scholarships.gujarat.gov.in',
-                        ],
-                    },
-                ],
-                requiredDocuments: ['aadhaar', 'category_certificate', 'income_certificate', 'gujarat_domicile', 'marksheet_10th_60percent', 'marksheet_12th_60percent', 'admission_proof', 'institution_fee_receipt', 'bank_account', 'passport_photo'],
                 isActive: true,
             },
             {

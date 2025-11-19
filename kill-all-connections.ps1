@@ -58,3 +58,5 @@ if ($psqlPath) {
     Write-Host "psql not found in PATH. Please use pgAdmin or restart PostgreSQL service." -ForegroundColor Yellow
 }
 
+
+

@@ -39,3 +39,5 @@ Then run: `npm run seed`
 
 After restarting PostgreSQL, the seed script will work perfectly!
 
+
+

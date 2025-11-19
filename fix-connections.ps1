@@ -68,3 +68,5 @@ Write-Host "  1. Start your backend: cd Scholarpath-backend && npm run start:dev
 Write-Host "  2. Run seed script: npm run seed" -ForegroundColor White
 Write-Host ""
 
+
+

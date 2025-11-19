@@ -19,3 +19,5 @@ WHERE datname = 'scholarpath'
 -- WHERE datname = 'scholarpath'
 --   AND pid <> pg_backend_pid();
 
+
+

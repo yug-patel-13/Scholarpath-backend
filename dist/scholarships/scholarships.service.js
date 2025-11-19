@@ -182,22 +182,7 @@ let ScholarshipsService = class ScholarshipsService {
                 return false;
             }
         }
-        if (rules.cmssCategories && Array.isArray(rules.cmssCategories) && rules.cmssCategories.length > 0) {
-            const hasCMSSCategory = (profile.lowLiteracyTaluka === true && rules.cmssCategories.includes('lowLiteracyTaluka')) ||
-                (profile.childrenOfMartyrs === true && rules.cmssCategories.includes('childrenOfMartyrs')) ||
-                (profile.shramikCard === true && rules.cmssCategories.includes('shramikCard')) ||
-                (profile.disabilityCertificate === true && rules.cmssCategories.includes('disabilityCertificate')) ||
-                (profile.widowCertificate === true && rules.cmssCategories.includes('widowCertificate')) ||
-                (profile.orphanCertificate === true && rules.cmssCategories.includes('orphanCertificate')) ||
-                (profile.tyaktaCertificate === true && rules.cmssCategories.includes('tyaktaCertificate'));
-            if (rules.requiresCMSSCategory === true && !hasCMSSCategory) {
-                return false;
-            }
-            if (rules.cmssCategories.length > 0 && !hasCMSSCategory) {
-                return false;
-            }
-        }
-        if (rules.requiresCMSSCategory === true) {
+        if (rules.requiresCMSSCategory === true && rules.cmssCategories && Array.isArray(rules.cmssCategories) && rules.cmssCategories.length > 0) {
             const hasAnyCMSSCategory = profile.lowLiteracyTaluka === true ||
                 profile.childrenOfMartyrs === true ||
                 profile.shramikCard === true ||
@@ -205,10 +190,9 @@ let ScholarshipsService = class ScholarshipsService {
                 profile.widowCertificate === true ||
                 profile.orphanCertificate === true ||
                 profile.tyaktaCertificate === true;
-            if (profile.caste && ['general', 'ebc'].includes(profile.caste.toLowerCase())) {
-                if (!hasAnyCMSSCategory) {
-                    return false;
-                }
+            const isSCSTOBC = profile.caste && ['sc', 'st', 'obc'].includes(profile.caste.toLowerCase());
+            if (!isSCSTOBC && !hasAnyCMSSCategory) {
+                return false;
             }
         }
         return true;
